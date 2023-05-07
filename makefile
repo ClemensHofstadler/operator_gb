@@ -1,13 +1,13 @@
-.PHONY: build install test
+.PHONY: install setup build clean
 
-build:
-	sage -python setup.py build_ext --inplace
-
-install: 
+install: build setup
 	sage -pip install --upgrade --no-index .
 
-test: build
-	PYTHONPATH=src sage -tp --force-lib src
+setup: requirements.txt
+	pip install -r requirements.txt
 
-testlong: build
-	PYTHONPATH=src sage -tp --long --warn-long 2 --force-lib src
+build: 
+	sage -python setup.py build_ext --inplace
+
+clean:
+	rm -rf __pycache__
