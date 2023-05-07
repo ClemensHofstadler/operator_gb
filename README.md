@@ -2,7 +2,7 @@
 
 ## Description
 
-SageMath package for Gröbner basis computations in the free algebra, with dedicated methods for automatising the proofs of operator statemetns.
+SageMath package for Gröbner basis computations in the free algebra, with dedicated methods for automatising the proofs of operator statements.
 In particular, the package provides several methods for searching for elemnts of certain forms in noncommutative polynomial ideals.
 
 ## License
