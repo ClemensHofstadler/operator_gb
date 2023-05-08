@@ -1,10 +1,7 @@
-.PHONY: install setup build clean
+.PHONY: install build clean
 
-install: build setup
-	sage -pip install --upgrade --no-index .
-
-setup: requirements.txt
-	sage -pip install -r requirements.txt
+install: build
+	sage -pip install --upgrade .
 
 build: 
 	sage -python setup.py build_ext --inplace

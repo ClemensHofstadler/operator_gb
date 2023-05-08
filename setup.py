@@ -48,6 +48,7 @@ setup(
     packages = [
         "operator_gb",
     ],
+    install_requires=['pyahocorasick'],
     package_dir = {'': 'src/'},
     ext_modules = extensions,
     include_dirs = sage.env.sage_include_directories() + ["."],
