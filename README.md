@@ -14,8 +14,8 @@ LICENSE file), either version 2 or (at your option) any later version
 
 ## Requirements
 
-- SageMath 9.7 or later is recommended
-- The Python library pyahocorasick (https://pyahocorasick.readthedocs.io/en/latest/)
+- SageMath 9.1 or later is recommended
+- The Python library `pyahocorasick` (https://pyahocorasick.readthedocs.io/en/latest/)
 
 ## Installation
 
@@ -51,12 +51,15 @@ packages to their Sage installations. See
 for more information.
 
 ### Using the package without installation
-
+ 
 To use operator_gb directly from a git checkout (without installation), run
 
     sage -python setup.py build_ext --inplace
 
 from the checkout, and add the `src/` directory to your Python `sys.path`.
+
+Note: This way of using the package requires the library `pyahocorasick` to be 
+already installed (or at least visible to Sage).
 
 The package contains compiled (Cython) modules which are automatically built as
 part of the installation procedure. Installation will fail if they cannot be
