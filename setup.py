@@ -39,6 +39,9 @@ try:
 except ImportError:
     extensions = do_cythonize()
 
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
+
 setup(
     name = "operator_gb",
     version = "1.0",
@@ -48,7 +51,7 @@ setup(
     packages = [
         "operator_gb",
     ],
-    install_requires=['pyahocorasick'],
+    install_requires = required,
     package_dir = {'': 'src/'},
     ext_modules = extensions,
     include_dirs = sage.env.sage_include_directories() + ["."],
