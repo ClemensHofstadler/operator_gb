@@ -4,7 +4,7 @@ install: build setup
 	sage -pip install --upgrade --no-index .
 
 setup: requirements.txt
-	pip install -r requirements.txt
+	sage -pip install -r requirements.txt
 
 build: 
 	sage -python setup.py build_ext --inplace
