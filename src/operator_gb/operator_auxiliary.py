@@ -21,6 +21,7 @@ AUTHORS:
 from __future__ import absolute_import
 
 from sage.all import FiniteWords, WordMorphism, prod
+from .nc_polynomial import NCPolynomial
 
 def pinv(a,b,a_adj,b_adj):
     r"""
@@ -77,6 +78,11 @@ def get_involution(F,symbols=None):
     return WordMorphism(d,domain=domain,codomain=codomain)
   
 def adj(f,phi=None):
+    convert = False
+    if isinstance(f,NCPolynomial):
+        convert = True
+        A = f.parent()
+        f = A(f)
     F = f.parent()
     # prepare involution endomorphism
     if not phi:
@@ -89,7 +95,9 @@ def adj(f,phi=None):
         m = F(str(w.to_monoid_element()))
         new_monomials.append(m)
     
-    return sum(map(prod,zip(f.coefficients(),new_monomials)))
+    g = sum(map(prod,zip(f.coefficients(),new_monomials)))
+    if convert: g = A(g)
+    return g
         
 def add_adj(F):
     out = F

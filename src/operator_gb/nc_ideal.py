@@ -315,7 +315,7 @@ class NCIdeal:
             G = I.intersect_with_one_sided_ideal(J,degbound=degbound,quiver=quiver,maxiter=maxiter,maxdeg=maxdeg,
                                                 trace_cofactors=trace_cofactors,criterion=criterion, reset=reset,verbose=verbose)  
         else:
-            raise NotImplementedError("Algorithm %s not implemented" % algorithm)
+            raise NotImplementedError("Heuristic %s not implemented" % heuristic)
         
         # pick those elements that are in (ab)_\rho
         # and compute x such that g = abx for g in G
@@ -345,9 +345,9 @@ class NCIdeal:
             J = NCIdeal([ab], order=I.order())
             G = I.intersect(J,maxiter=maxiter,maxdeg=maxdeg,trace_cofactors=trace_cofactors,criterion=criterion,reset=reset,verbose=verbose)
         elif heuristic == 'one-sided':
-            raise NotImplementedError("Algorithm %s not implemented yet" % algorithm)
+            raise NotImplementedError("Heuristic %s not implemented yet" % heuristic)
         else:
-            raise NotImplementedError("Algorithm %s not implemented" % algorithm)
+            raise NotImplementedError("Heuristic %s not implemented" % heuristic)
         
         # pick those elements that are in (ab)_\lambda
         # and compute x such that g = xab for g in G
