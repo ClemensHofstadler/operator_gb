@@ -66,12 +66,14 @@ class F4():
 ############################################################################
     def compute_basis(self,maxiter=10,maxdeg=-1,trace_cofactors=True,criterion=True,reset=True,verbose=0):
         global nr_pairs
+        global zero_reductions
         
         self.__maxdeg = maxdeg
         self.__criterion = criterion
         self.__verbose = verbose
         
         nr_pairs = 0
+        zero_reductions = 0
         
         if reset or not self.__G: 
             self.prepare_input(verbose,trace_cofactors=trace_cofactors)
@@ -88,7 +90,7 @@ class F4():
             PP = self.reduction(trace_cofactors=trace_cofactors)
             if verbose > 0:
                 print("Reduction took: %.5f" % (time()-start))
-                
+                            
             self.add_polynomials(PP)                                               
             self.compute_ambiguities(oldlen)
             oldlen = len(self.__G)
@@ -100,6 +102,7 @@ class F4():
             
         if verbose > 1:
             print("In total, %d critical pairs were reduced." % nr_pairs)
+            print("In total, %d reductions to zero occurred." % zero_reductions)
         
         if trace_cofactors:
             self.rewrite_cofactors()
@@ -108,7 +111,6 @@ class F4():
 
 ############################################################################
     def compute_ambiguities(self,oldlen=0):
-        global nr_pairs
         
         G = self.__G
         maxdeg = self.__maxdeg
@@ -137,6 +139,7 @@ class F4():
 ############################################################################
     def reduction(self,trace_cofactors=True):
         global nr_pairs
+        global zero_reductions
         
         G = self.__G
         amb = self.__amb
@@ -160,8 +163,7 @@ class F4():
         F = flatten([pair.fg() for pair in P])
         pivot_rows,pivot_columns,columns = self.symbolic_preprocessing(F)
                 
-        assert len(pivot_rows) == len(pivot_columns)
-
+                
         #split critical pairs into pivot and non-pivot rows
         rest_rows = [pair.g() for pair in P]
         for pair in P:
@@ -190,6 +192,8 @@ class F4():
         T,T1,M = faugere_lachartre(rows,columns,size_A,trace_cofactors=trace_cofactors)
         
         PP = self.matrix_to_polies(T,T1,M,rest_columns,rows,size_A)
+        
+        zero_reductions += len(P) - len(PP)
     
         return PP
 ############################################################################
