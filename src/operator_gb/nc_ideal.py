@@ -109,8 +109,8 @@ class NCIdeal:
         h = reduced_form(G, g, trace_cofactors=trace_cofactors)
         return h
 ############################################################################        
-    def ideal_membership(self,f,maxiter=10,maxdeg=-1,trace_cofactors=True,criterion=True,reset=True,verbose=0):
-        h = self.reduced_form(f)
+    def ideal_membership(self,f,maxiter=10,maxdeg=-1,criterion=True,reset=True,verbose=0):
+        h = self.reduced_form(f, maxiter=maxiter, maxdeg=maxdeg, criterion=criterion, reset=reset, verbose=verbose)
         if h.is_zero():
             print("Ideal membership verified!")
             return h.cofactors()

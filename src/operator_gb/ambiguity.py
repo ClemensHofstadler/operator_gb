@@ -90,14 +90,20 @@ class Ambiguity:
         
         """  
         
-        _,_,sA,sC = self.AC()
-        _,_,oA,oC = other.AC()
+        sAj, sCj = self.__Aj, self.__Cj
+        oAj, oCj = other.__Aj, other.__Cj
+        sdeg = self.degree()
+        odeg = other.degree()
         
-        if sA.endswith(oA) and sC.startswith(oC):
-            if len(sA) == len(oA) and len(sC) == len(oC): return 1
+        start = sAj - oAj
+        end = start + odeg
+        
+        
+        
+        if start < 0 or end > sdeg: return 0
+        elif self.__ABC[start:end] == other.__ABC:
+            if sdeg == odeg: return 1
             else: return 2
-        else:
-            return 0
 ############################################################################    
     @staticmethod
     def generate_incls(a, b):        
@@ -148,21 +154,21 @@ class Ambiguity:
 ############################################################################
     @staticmethod
     def gebauer_moeller(amb):
-        amb = sorted(amb,key=lambda a : (a.degree(), a.i(), a.__Ai))
+        amb = sorted(amb,key=lambda a : (a.degree(), a.__i, a.__Ai))
         idx = 0
                                     
         while idx < len(amb)-1:
             a = amb[idx]
             idx += 1
             amb_tmp = amb[:idx]
-            j = a.i()
+            j = a.__i
             for aa in amb[idx:]:
                 vw = aa / a
                 if vw:
                     # divisible and vw != 1, or
                     # divisible and i > j
                     # => throw away aa
-                    i = aa.i()
+                    i = aa.__i
                     if vw > 1 or i > j: continue
                 
                     # divisible, i == j, vw = 1 -> look at cofactors of ambiguities
