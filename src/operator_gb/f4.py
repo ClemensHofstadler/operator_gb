@@ -48,6 +48,7 @@ class F4():
         self.__verbose = 0
         self.__amb = []
         self.__G = []
+        self.__constant_flag = False
 ############################################################################        
     def lm(self): return list(self.__lm.items()) 
     def parent(self): return self.__parent
@@ -61,6 +62,7 @@ class F4():
         self.__suffix_trie.clear()
         self.__amb = []
         self.__G = []
+        self.__constant_flag = False
 ############################################################################
 # Compute Gröbner basis
 ############################################################################
@@ -77,6 +79,8 @@ class F4():
         
         if reset or not self.__G: 
             self.prepare_input(verbose,trace_cofactors=trace_cofactors)
+            # constant_flag checks if GB contains 1
+            if self.__constant_flag: return self.__G
             self.compute_ambiguities()
         
         self.__already_rewritten = len(self.__G)
@@ -91,13 +95,14 @@ class F4():
             if verbose > 0:
                 print("Reduction took: %.5f" % (time()-start))
                             
-            self.add_polynomials(PP)                                               
+            self.add_polynomials(PP)  
+            if self.__constant_flag: break                                             
             self.compute_ambiguities(oldlen)
             oldlen = len(self.__G)
             if verbose > 0:
                 print("Iteration %d finished. G has now %d elements.\n" % (count,len(self.__G)))
                     
-        if not self.__amb and verbose > 0:
+        if (not self.__amb or self.__constant_flag) and verbose > 0:
             print("All critial pairs could be reduced to zero.")
             
         if verbose > 1:
@@ -140,7 +145,7 @@ class F4():
     def reduction(self,trace_cofactors=True):
         global nr_pairs
         global zero_reductions
-        
+                
         G = self.__G
         amb = self.__amb
         verbose = self.__verbose
@@ -162,8 +167,7 @@ class F4():
         # do symbolic preprocessing
         F = flatten([pair.fg() for pair in P])
         pivot_rows,pivot_columns,columns = self.symbolic_preprocessing(F)
-                
-                
+
         #split critical pairs into pivot and non-pivot rows
         rest_rows = [pair.g() for pair in P]
         for pair in P:
@@ -190,11 +194,11 @@ class F4():
         # M...the rref we are interested in
         # T,T1...the transformation matrix
         T,T1,M = faugere_lachartre(rows,columns,size_A,trace_cofactors=trace_cofactors)
-        
+                 
         PP = self.matrix_to_polies(T,T1,M,rest_columns,rows,size_A)
-        
+                
         zero_reductions += len(P) - len(PP)
-    
+            
         return PP
 ############################################################################
     def symbolic_preprocessing(self,F):
@@ -277,14 +281,18 @@ class F4():
         
         # add interreduced generators to GB    
         self.add_polynomials(G)
+        
 ############################################################################                    
-    
     def add_polynomials(self,PP):
         oldlen = len(self.__G)
         for i,p in enumerate(PP):
             m = str(p.lm())
-            self.__lm.add_word(m,(i+oldlen,m))
-            self.__suffix_trie.add_word(m[::-1],(oldlen+i,m))   
+            if m:
+                self.__lm.add_word(m,(i+oldlen,m))
+                self.__suffix_trie.add_word(m[::-1],(oldlen+i,m))   
+            else:
+                self.__constant_flag = True
+                break
 
         self.__lm.make_automaton()
         self.__G += PP

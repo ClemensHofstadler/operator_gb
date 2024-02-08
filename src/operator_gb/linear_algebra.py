@@ -14,11 +14,11 @@ def faugere_lachartre(rows,columns,m,trace_cofactors=True):
     """
     
     M = set_up_matrix(rows,columns)
-
+    
     AB,CD = split_along_rows(M,m)
     A,B = split_along_columns(AB,m)
     C,D = split_along_columns(CD,m)
-        
+            
     #compute D - CA^{-1}B 
     CA = trsm(A,C)
     #assert CA == C*A.inverse()       
@@ -36,6 +36,6 @@ def faugere_lachartre(rows,columns,m,trace_cofactors=True):
 
     T1 = mat_mul(-T,CA)
     #assert T1 == - T*CA
-    
+        
     return T,T1,M
     

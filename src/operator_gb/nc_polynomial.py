@@ -68,10 +68,15 @@ class NCPolynomial:
             if c > 0: s += " + "
             else: s += " - "
             
-            if abs(c) != 1: 
-                s += str(abs(c)) + "*"        
-            s += m.pretty_print()
-        
+            # m is not 1
+            if str(m):
+                if abs(c) != 1: 
+                    s += str(abs(c)) + "*"        
+                s += m.pretty_print()
+            # special case m = 1
+            else:
+                s += str(abs(c))
+                
         # remove first + if existent
         if not s: s = "0"
         elif s[1] == "+": s = s[3:]
