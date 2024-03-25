@@ -27,7 +27,7 @@ def do_cythonize():
             [Extension(
                 "*",
                 ["src/operator_gb/rational_linear_algebra.pyx"],
-                extra_compile_args=['-std=c11'],
+                extra_compile_args=['-std=c11', '-stdlib=libc++'],
             )],
             aliases = sage.env.cython_aliases(),
         )
@@ -46,7 +46,7 @@ setup(
     name = "operator_gb",
     version = "1.0",
     author = "Clemens Hofstadler",
-    author_email = "clemens@hofstadler@mathematik.uni-kassel.de",
+    author_email = "clemens@hofstadler@jku.at",
     license = "GPLv2",
     packages = [
         "operator_gb",
