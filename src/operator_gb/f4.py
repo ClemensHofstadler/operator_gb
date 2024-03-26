@@ -122,14 +122,14 @@ class F4():
         verbose = self.__verbose
         criterion = self.__criterion
                 
-        words = [str(g.lm()) for i,g in enumerate(G)]         
+        words = [str(g.lm()) for g in G]         
         l = len(self.__amb)
             
         start = time()
         prefix_trie = self.__lm
         suffix_trie = self.__suffix_trie
         for i in range(oldlen,len(words)):
-            amb_i = Ambiguity.generate_with_tries(prefix_trie,suffix_trie,words,i,self.__amb,criterion=criterion)
+            amb_i = Ambiguity.generate_with_tries(prefix_trie,suffix_trie,words,i,criterion=criterion)
             if maxdeg > 0: amb_i = [a for a in amb_i if a.degree() <= maxdeg]
             if criterion:
                 self.__amb = Ambiguity.chain_criterion(self.__amb,amb_i,words[i],i)

@@ -123,7 +123,7 @@ class Ambiguity:
             
 ############################################################################
     @staticmethod
-    def generate_with_tries(prefix_trie, suffix_trie, words, i, amb_old, criterion=True):
+    def generate_with_tries(prefix_trie, suffix_trie, words, i, criterion=True):
           
         amb = []
         m = words[i]
