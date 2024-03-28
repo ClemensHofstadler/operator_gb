@@ -73,5 +73,5 @@ built.
 
 ## Contact
 
-Clemens Hofstadler (<clemens.hofstadler@mathematik.uni-kassel.de>)
+Clemens Hofstadler (<clemens.hofstadler@jku.at>)
 
