@@ -26,8 +26,8 @@ def do_cythonize():
     return cythonize(
             [Extension(
                 "*",
-                ["src/operator_gb/rational_linear_algebra.pyx"],
-                extra_compile_args=['-std=c11'],
+                ["src/operator_gb/*.pyx"],
+                extra_compile_args=['-std=c11', '-stdlib=libc++'],
             )],
             aliases = sage.env.cython_aliases(),
         )

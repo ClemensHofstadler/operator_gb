@@ -62,20 +62,24 @@ class NCPolynomial:
 ############################################################################
     def __repr__(self):
         s = ""
+        K = self.parent().base_ring()
         for c,m in zip(self.__coeffs,self.__mons):
             # sign
+            
             if c == 0: continue
             if c > 0: s += " + "
-            else: s += " - "
+            else: 
+                s += " - "
+                c = -c
             
             # m is not 1
             if str(m):
-                if abs(c) != 1: 
-                    s += str(abs(c)) + "*"        
+                if c != 1: 
+                    s += str(c) + "*"        
                 s += m.pretty_print()
             # special case m = 1
             else:
-                s += str(abs(c))
+                s += str(c)
                 
         # remove first + if existent
         if not s: s = "0"

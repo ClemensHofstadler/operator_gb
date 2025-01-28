@@ -98,8 +98,6 @@ class Ambiguity:
         start = sAj - oAj
         end = start + odeg
         
-        
-        
         if start < 0 or end > sdeg: return 0
         elif self.__ABC[start:end] == other.__ABC:
             if sdeg == odeg: return 1
@@ -141,7 +139,7 @@ class Ambiguity:
             C = m[k:]            
             amb += [Ambiguity(AB+C,0,len(AB),len(AB)-k,len(AB+C),j,i) for j,AB in suffix_trie.values(B) if len(AB) > k and j < i]
    
-        # inclusion ambiguities with m = ABC       
+        # inclusion ambiguities with m = ABC   
         amb += [Ambiguity(m,k-len(B)+1,k+1,0,len(m),j,i) for k,(j,B) in prefix_trie.iter(m) if j < i]
         # inclusion ambiguities with m = B
         v = i,m

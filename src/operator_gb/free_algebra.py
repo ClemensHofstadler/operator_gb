@@ -1,6 +1,7 @@
 
 from __future__ import absolute_import
 from sage.all import *
+from sage.rings.finite_rings.finite_field_base import FiniteField
 
 from .auxiliary import flatten, simplify_str
 from .orderings import deglex,multilex
@@ -17,7 +18,7 @@ from .translator import Translator
 class MyFreeAlgebra(Parent):
     def __init__(self,K,X):
                 
-        if K not in {QQ}:
+        if K not in {QQ} and not isinstance(K, FiniteField):
             raise TypeError("coefficient field %s not supported" % str(K))
         if not len(X): raise ValueError("Need at least one variable")
         

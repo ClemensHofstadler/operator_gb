@@ -9,8 +9,8 @@ from copy import copy
 ############################################################################
 class CritPair:
     def __init__(self, amb , gi, gj):
-    
-        A = gi.parent()
+        
+        P = gi.parent()
         
         self.__degree = amb.degree()
         Ai,Ci,Aj,Cj = amb.AC()
@@ -21,8 +21,8 @@ class CritPair:
             self.__degree = -1
         else:
             i,j = amb.ij()
-            g1.append_cofactor(Cofactor(1,Ai,i,Ci,A))
-            g2.append_cofactor(Cofactor(1,Aj,j,Cj,A))
+            g1.append_cofactor(Cofactor(1,Ai,i,Ci,P))
+            g2.append_cofactor(Cofactor(1,Aj,j,Cj,P))
             
             self.__f = g1
             self.__g = g2

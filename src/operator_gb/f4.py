@@ -123,7 +123,6 @@ class F4():
         criterion = self.__criterion
                 
         words = [str(g.lm()) for g in G]         
-        l = len(self.__amb)
             
         start = time()
         prefix_trie = self.__lm
@@ -190,6 +189,9 @@ class F4():
         columns = {m:i for (i,m) in enumerate(pivot_columns + rest_columns)}
         pivot_rows.sort(key=lambda f: f.lm(),reverse=True)
         rows = pivot_rows + rest_rows
+        
+        if verbose > 0:
+            print("Set up matrix of size (%d, %d)" % (len(rows), len(columns)))
         
         # M...the rref we are interested in
         # T,T1...the transformation matrix

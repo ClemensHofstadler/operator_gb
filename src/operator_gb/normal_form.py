@@ -23,12 +23,15 @@ AUTHOR:
 from copy import deepcopy
 
 from sage.all import matrix,QQ
+from sage.matrix.matrix_rational_sparse import Matrix_rational_sparse
 
 from .cofactor import Cofactor
 from .free_algebra import MyFreeAlgebra
 from .nc_monomial import NCMonomial
 from .nc_polynomial import NCPolynomial
-from .rational_linear_algebra import set_up_matrix, augment
+from .rational_linear_algebra import set_up_matrix, rational_augment
+from .modular_linear_algebra import modn_augment
+
 
 ############################################################################
 # Interreduction
@@ -101,7 +104,10 @@ def __reduced_form__(G,i,A,one_sided=None,intern=True,trace_cofactors=True):
     
     rows.insert(0,f)
     M = set_up_matrix(rows,{m:i for i,m in enumerate(columns)})
-    M = augment(M)
+    if isinstance(M,Matrix_rational_sparse):
+        M = rational_augment(M)
+    else:
+        M = modn_augment(M)
     M.echelonize()
     
     row_idx = M.nonzero_positions_in_column(nr_columns)[-1]
@@ -109,9 +115,10 @@ def __reduced_form__(G,i,A,one_sided=None,intern=True,trace_cofactors=True):
     
     coefficients = []
     monomials = []
+    c = M[row_idx, nr_columns]
     for j in reversed(pos):
         if j >= nr_columns: continue
-        coefficients.append(M[row_idx,j])
+        coefficients.append(1/c * M[row_idx,j])
         monomials.append(columns[j])
         
     if monomials:

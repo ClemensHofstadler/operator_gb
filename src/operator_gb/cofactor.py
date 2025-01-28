@@ -39,8 +39,11 @@ class Cofactor:
 ############################################################################     
     def __repr__(self):
         c = ''
-        if self.__c < 0: c += '-'
-        if abs(self.__c) != 1: c += str(abs(self.__c)) + "*"
+        cc = self.__c
+        if cc < 0: 
+            c += '-'
+            cc = -cc
+        if cc != 1: c += str(cc) + "*"
         a = c + my_pretty_print(self.__a, self.__parent)
         i = str(self.__i)
         b = my_pretty_print(self.__b, self.__parent)
@@ -49,9 +52,13 @@ class Cofactor:
 ############################################################################
     def pretty_print(self,f):
         c = ''
-        if self.__c < 0: c += ' - '
-        elif self.__c > 0: c += ' + '
-        if abs(self.__c) != 1: c += str(abs(self.__c)) + "*"
+        cc = self.__c
+        if cc > 0:
+            c += ' + '
+        elif cc < 0: 
+            c += ' - '
+            cc = -cc
+        if cc != 1: c += str(cc) + "*"
         if self.__a:
             a = c + my_pretty_print(self.__a, self.__parent) + "*"
         else:
