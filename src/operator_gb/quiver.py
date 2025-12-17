@@ -35,7 +35,7 @@ class Quiver:
         self.__vars = []
         for (s,t,l) in triples:
             G.add_edge(str(s),str(t),str(l))
-            if l not in self.__vars:
+            if str(l) not in self.__vars:
                 self.__vars.append(str(l))
         self.__G = G
 ############################################################################
@@ -60,6 +60,11 @@ class Quiver:
     def target(self,label):
         return [t for (s,t,l) in self.__G.edge_iterator() if l == label]
 ############################################################################
+    def add_edge(self, s, t, l):
+        self.__G.add_edge(str(s),str(t),str(l))
+        if str(l) not in self.__vars:
+            self.__vars.append(str(l))
+############################################################################    
     def to_dict(self,by_source=True):
         D = dict()
         for (s,t,x) in self.__G.edge_iterator():
