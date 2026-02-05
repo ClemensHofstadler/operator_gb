@@ -541,33 +541,37 @@ def evaluate(p, matrices):
     r"""
     Input:
         - ``p`` -- a polynomial
-        - ``matrix_dict`` -- a dictionary with matrices for each variable of the polynomial p (instead of dictionary of matrix sizes as in poly_to_matrix)
+        - ``matrices`` -- a dictionary with matrices for each variable of the polynomial p (instead of dictionary of matrix sizes as in poly_to_matrix)
 
     Output:
-        Evaluation of p under the given matrices
+        Resulting matrix when you plug them into the polynomial
 
     """
     F = p.parent()
-    X = [str(v) for v in F.gens()]
+    X = [str(v) for v in p.variables()]
         
     subs_dict = dict()
     for v in X:
         if v.endswith('_adj'):
-            subs_dict[F(v)] = matrices[v.removesuffix('_adj')].transpose()
+            subs_dict[v] = matrices[v.removesuffix('_adj')].transpose()
         else:
-            subs_dict[F(v)] = matrices[v]
-                    
-    # remove constant coefficient
-    M = p.parent().basis().keys()
-    c = p.coefficient(M(1))
-    f = p - c 
-                
-    # plug in matrices               
-    res = f.subs(subs_dict)
-    # add constant coefficient back in
-    if c != 0:
-        res += c*identity_matrix(res.nrows())  
-         
+            subs_dict[v] = matrices[v]
+                        
+    # plug in matrices  
+    res = 0
+    for m, c in p.monomial_coefficients().items():
+        res += c * evaluate_monomial(m,subs_dict)             
+                 
+    return res
+    
+def evaluate_monomial(m,subs_dict): 
+    res = 1
+    for v,exp in m:
+        for _ in range(exp):
+            if res == 1:
+                res = subs_dict[str(v)]
+            else:
+                res = res * subs_dict[str(v)]
     return res
 
 def build_matrix_model(model, symbolic_matrices, sat_dict):
