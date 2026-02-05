@@ -3,7 +3,12 @@
 ## Description
 
 SageMath package for Gröbner basis computations in the free algebra, with dedicated methods for automatising the proofs of operator statements.
-In particular, the package provides several methods for searching for elemnts of certain forms in noncommutative polynomial ideals.
+In particular, the package provides several methods for searching for elemnts of certain forms in noncommutative polynomial ideals, and it can 
+certify non-membership in an ideal by computing matrix certificates.
+
+For the usage of `operator_gb`, we refer to the following CoCalc worksheets:
+- https://cocalc.com/georeg/Moore-Penrose-case-study/notebook
+- https://cocalc.com/share/public_paths/43f6aeac21a85d08e70ab672157ab2caa49900aa
 
 ## License
 
@@ -14,17 +19,18 @@ LICENSE file), either version 2 or (at your option) any later version
 
 ## Requirements
 
-- SageMath 9.1 or later is recommended
+- SageMath 10.6 or later is recommended
 
 ## Dependencies
 
+- The SAT solver `CaDiCaL` (https://github.com/arminbiere/cadical)
 - The Python library `pyahocorasick` (https://pyahocorasick.readthedocs.io/en/latest/)
 
 ## Installation
 
 ### With SageMath built from source or binaries from sagemath.org
 
-**Note**: This way of installing the package also automatically installs the `pyahocorasick` library.
+**Note**: This way of installing the package also automatically installs `CaDiCaL` and `pyahocorasick`.
 Thus, except executing the command below, no additional work is required.
 
 To download and install the latest version on a system where SageMath
@@ -58,7 +64,9 @@ for more information.
 ### Using the package without installation
 
 **Note**: This way of using the package requires the library `pyahocorasick` to be 
-already installed (or at least visible to Sage).
+already installed (or at least visible to Sage) and the executable of `CaDiCaL`
+to be placed in the `src` folder of `operator_gb` (required for the the computation of 
+matrix ceritifcates)
  
 To use operator_gb directly from a git checkout (without installation), run
 
