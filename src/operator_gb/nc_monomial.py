@@ -14,7 +14,7 @@ AUTHORS:
 
 # ****************************************************************************
 #                          Copyright (C) 2023
-#      Clemens Hofstadler(clemens.hofstadler@mathematik.uni-kassel.de)
+#      Clemens Hofstadler(clemens.hofstadler@jku.at)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
