@@ -6,7 +6,7 @@ SageMath package for Gröbner basis computations in the free algebra, with dedic
 In particular, the package provides several methods for searching for elemnts of certain forms in noncommutative polynomial ideals, and it can 
 certify non-membership in an ideal by computing matrix certificates.
 
-For the usage of `operator_gb`, we refer to the following CoCalc worksheets:
+For the usage of `operator_gb`, please check out the following CoCalc worksheets:
 - https://cocalc.com/georeg/Moore-Penrose-case-study/notebook
 - https://cocalc.com/share/public_paths/43f6aeac21a85d08e70ab672157ab2caa49900aa
 
