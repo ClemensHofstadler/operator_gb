@@ -526,7 +526,7 @@ def create_symbolic_matrix(name, rows, cols, ring=None):
 def generate_quiver(X):
     Q = Quiver([('V','V',str(x)) for x in X])
     dims = {'V' : dim}
-    return quiver, dims
+    return Q, dims
 
 def ratrec(lift, mod):
     return {
