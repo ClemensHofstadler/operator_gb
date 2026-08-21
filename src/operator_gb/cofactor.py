@@ -79,7 +79,7 @@ class Cofactor:
         return not (self == other)
 ############################################################################
     def __hash__(self):
-         return hash(tuple(self.__c, self.__a, self.__i, self.__b))
+         return hash((self.__c, self.__a, self.__i, self.__b))
 ############################################################################
     def __mul__(self, other):
         out = copy(self)

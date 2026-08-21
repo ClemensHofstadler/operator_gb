@@ -143,8 +143,19 @@ class NCPolynomial:
     def zero(P): return NCPolynomial([P.zero()],[NCMonomial('',P)])
 ############################################################################                
     def subs(self,x,f):
+        """
+        Replace every occurrence of the variable ``x`` by the polynomial ``f``.
+
+        .. NOTE::
+
+            The cofactor representation is not preserved - the result carries
+            no cofactors.
+        """
         T = self.parent().translator()
         to_replace = T(x)
+        if any(to_replace in str(mf) for mf in f.__mons):
+            raise ValueError("Cannot substitute %s by an expression that "
+                             "contains %s itself" % (str(x),str(x)))
         out = self.__copy__()
         i = 0
         while i < len(out.__mons):
@@ -156,7 +167,7 @@ class NCPolynomial:
                 out.__mons.remove(m)
                 coeff = out.__coeffs.pop(i)
                 a,b = str(m).split(to_replace,1)
-                out.__mons += [m.lrmul(a,b) for m in f.__mons]
+                out.__mons += [mf.lrmul(a,b) for mf in f.__mons]
                 out.__coeffs += [coeff * c for c in f.__coeffs]
         
         # clean up
@@ -187,9 +198,14 @@ class NCPolynomial:
     def make_monic(self):
         """
         Really update self
+
+        Divides ``self`` by its leading coefficient and scales the cofactor
+        representation by the same factor.
         """
         lc = self.__coeffs[-1]
-        if lc != 1: self.__coeffs = [c / lc for c in self.__coeffs]
+        if lc != 1:
+            self.__coeffs = [c / lc for c in self.__coeffs]
+            for cofactor in self.__cofactors: cofactor.multiply_by(1/lc)
         return lc
 ############################################################################
     def append_cofactor(self, c):

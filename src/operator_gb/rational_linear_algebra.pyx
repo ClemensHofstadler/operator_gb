@@ -149,7 +149,11 @@ cpdef rational_mat_mul(Matrix_rational_sparse self, Matrix_rational_sparse right
 ############################################################################
 cpdef rational_trsm(Matrix_rational_sparse A, Matrix_rational_sparse B):
     r"""
-    Given A,B with A upper triangular, compute BA^{-1}
+    Given A,B with A UNIT upper triangular, compute BA^{-1}
+
+    .. WARNING::
+
+        The diagonal of A is assumed to be 1.
     """
     cdef Py_ssize_t i, k, nc
     cdef mpq_vector tmp

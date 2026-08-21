@@ -20,7 +20,7 @@ AUTHOR:
 #  http://www.gnu.org/licenses/                                             #
 #############################################################################
 
-from copy import deepcopy
+from copy import copy, deepcopy
 
 from sage.all import matrix,QQ
 from sage.matrix.matrix_rational_sparse import Matrix_rational_sparse
@@ -37,6 +37,33 @@ from .modular_linear_algebra import modn_augment
 # Interreduction
 ############################################################################
 def interreduce(G,one_sided=None):
+    r"""
+    Interreduce a list of noncommutative polynomials.
+
+    Zero polynomials are dropped and the remaining ones are
+    made monic, with their cofactor representations scaled along.
+
+    INPUT:
+
+    - ``G`` -- a list of NCPolynomials
+
+    - ``one_sided`` -- ``None`` or ``'right'`` (default: ``None``)
+
+    OUTPUT: The interreduced, monic list of polynomials.
+
+    EXAMPLES::
+
+        sage: from operator_gb import *
+        sage: F.<a,b> = FreeAlgebra(QQ,2)
+        sage: A = MyFreeAlgebra(QQ,F.gens())
+        sage: interreduce([A(a*b + b*a), A(a*b - b*a)])
+        [a*b, b*a]
+
+    TESTS:
+
+        sage: [g.lc() for g in interreduce([A(a*b + b*a), A(a*b - b*a)])]
+        [1, 1]
+    """
     
     if not G: return G
     if not isinstance(G[0],NCPolynomial):
@@ -67,7 +94,10 @@ def interreduce(G,one_sided=None):
                     first_change = i
                     changes = True
 
-    return [g for g in H if not g.is_zero()]
+    H = [g for g in H if not g.is_zero()]
+    for g in H: g.make_monic()
+
+    return H
 ############################################################################
 # Normal form computation
 ############################################################################
@@ -81,8 +111,14 @@ def reduced_form(G, f, trace_cofactors=True):
         raise ValueError("Different parent structures")
     A = f.parent()
         
-    if trace_cofactors and not G[0].cofactors():
-         for i,g in enumerate(G): g.append_cofactor(Cofactor(1,'',i,'',A))
+    if trace_cofactors:
+        traced = [bool(g.cofactors()) for g in G]
+        if not any(traced):
+            for i,g in enumerate(G): g.append_cofactor(Cofactor(1,'',i,'',A))
+        elif not all(traced):
+            raise ValueError("Only some elements of G carry a cofactor "
+                             "representation. The result would mix up the "
+                             "polynomials that the cofactors refer to.")
             
     h = __reduced_form__(G + [f], len(G), f.parent(), intern=False, trace_cofactors=trace_cofactors)
     # h is such that f + h.cofactors() = h
@@ -132,21 +168,16 @@ def __reduced_form__(G,i,A,one_sided=None,intern=True,trace_cofactors=True):
     
     # some reduction - take care of cofactors
     if trace_cofactors:
-        # treat cofactors of the reducee separately
-        t = M[row_idx,nr_columns]
-        cofactors = [cof * t for cof in f.cofactors()]
-        normal_form.append_cofactors(cofactors)
+        normal_form.append_cofactors([copy(cof) for cof in f.cofactors()])
         # treat cofactors of the reducers
         for j in pos:
             if j <= nr_columns: continue
-            t = M[row_idx,j]
+            t = M[row_idx,j] / c
             for cofactor in rows[j-nr_columns].cofactors():
-                # the coefficient will always be 1, since these are just
-                # dummy cofactors to keep track of a,i,b
                 _,a,i,b = cofactor.caib()
                 cofactors = [cof.lrmul(a,b) * t for cof in G[i].cofactors()]
                 normal_form.append_cofactors(cofactors) 
-            normal_form.simplify_cofactors()
+        normal_form.simplify_cofactors()
     
     return normal_form
 ############################################################################

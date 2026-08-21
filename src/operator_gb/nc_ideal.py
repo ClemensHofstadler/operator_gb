@@ -70,12 +70,15 @@ class NCIdeal:
             relevant_variables = {str(x) for x in relevant_variables}
         else:
             relevant_variables = set(T.gens())
+        # X stores variables in their internal representation, so the filter
+        # below has to use it as well
+        relevant_variables = {T(x) for x in relevant_variables}
         
         if quiver:
             X = quiver.to_dict()
             for k,v in X.items(): X[k] = [(t,T(x)) for t,x in v]
         else:
-            X = {0 : [(0,T(x)) for x in relevant_variables]}
+            X = {0 : [(0,x) for x in relevant_variables]}
         
         right_GB = deepcopy(G)
         if quiver:

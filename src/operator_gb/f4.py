@@ -80,7 +80,9 @@ class F4():
         if reset or not self.__G: 
             self.prepare_input(verbose,trace_cofactors=trace_cofactors)
             # constant_flag checks if GB contains 1
-            if self.__constant_flag: return self.__G
+            if self.__constant_flag:
+                self.__already_rewritten = len(self.__G)
+                return self.__G
             self.compute_ambiguities()
         
         self.__already_rewritten = len(self.__G)
@@ -288,12 +290,15 @@ class F4():
     def add_polynomials(self,PP):
         oldlen = len(self.__G)
         for i,p in enumerate(PP):
+            # faugere_lachartre relies on all elements of G being monic
+            if not p.is_zero(): p.make_monic()
             m = str(p.lm())
             if m:
                 self.__lm.add_word(m,(i+oldlen,m))
                 self.__suffix_trie.add_word(m[::-1],(oldlen+i,m))   
             else:
                 self.__constant_flag = True
+                PP = PP[:i+1]
                 break
 
         self.__lm.make_automaton()

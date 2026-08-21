@@ -60,11 +60,14 @@ def my_pretty_print(string,A):
     T = A.translator()
     
     X = set(m)
-    m = "*".join([m[i:i+1] for i in range(len(m))]) + "*"
+    m = "*" + "*".join([m[i:i+1] for i in range(len(m))]) + "*"
     for x in X:
-        eq = r"(%s\*){2,}" % x
-        m = re.sub(eq, lambda y : str(x) + "^" + str((y.end() - y.start())//2) + "*", m)
-    return T(m[:-1],to_internal=False)
+        # x is a single internal character, which may well be a regex
+        # metacharacter, hence the re.escape
+        eq = r"((?<=\*)%s\*){2,}" % re.escape(x)
+        l = len(x) + 1
+        m = re.sub(eq, lambda y : x + "^" + str((y.end() - y.start())//l) + "*", m)
+    return T(m[1:-1],to_internal=False)
 ############################################################################
 def simplify_str(string):
     r"""

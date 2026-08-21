@@ -84,7 +84,7 @@ class MyFreeAlgebra(Parent):
             mons = [m for c,m in d]
             coeffs = [c for c,m in d]
             if not mons:
-                operator_gb.nc_polynomial.NCPolynomial.zero(self)
+                return operator_gb.nc_polynomial.NCPolynomial.zero(self)
             return operator_gb.nc_polynomial.NCPolynomial(coeffs,mons)
 ############################################################################   
     def set_order(self,X):

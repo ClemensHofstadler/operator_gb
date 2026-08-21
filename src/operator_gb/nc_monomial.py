@@ -239,7 +239,7 @@ class NCMonomial:
         m = "*" + "*".join([m[i:i+1] for i in range(len(m))]) + "*"
         m = T(m,to_internal=False)
         for x in self.__parent.gens():
-            eq = r"((?<=\*)%s\*){2,}" % x
+            eq = r"((?<=\*)%s\*){2,}" % re.escape(x)
             l = len(x) + 1
             m = re.sub(eq, lambda y : str(x) + "^" + str((y.end() - y.start())//l) + "*", m)
         return m[1:-1]

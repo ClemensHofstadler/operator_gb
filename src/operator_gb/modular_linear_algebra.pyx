@@ -89,7 +89,11 @@ cpdef modn_mat_mul(Matrix_modn_sparse self, Matrix_modn_sparse right):
 ############################################################################
 cpdef modn_trsm(Matrix_modn_sparse A, Matrix_modn_sparse B):
     r"""
-    Given A,B with A upper triangular, compute BA^{-1}
+    Given A,B with A UNIT upper triangular, compute BA^{-1}
+
+    .. WARNING::
+
+        The diagonal of A is assumed to be 1.
     """
     cdef Py_ssize_t i, k, nc
     cdef c_vector_modint* a
