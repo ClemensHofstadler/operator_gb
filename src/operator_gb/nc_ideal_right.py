@@ -44,7 +44,7 @@ class NCIdeal_right:
     def parent(self): return self.__parent
     def internal_gens(self): return self.__internal_gens
     def order(self): return self.__parent.order()
-    def base_ring(self): return self.__parent().base_ring()
+    def base_ring(self): return self.__parent.base_ring()
 ############################################################################    
     def __repr__(self):
         return "Noncommutative ideal %s of %s" % (str(tuple(self.__gens)),str(self.__parent))
@@ -58,7 +58,7 @@ class NCIdeal_right:
         if self.__parent != other.__parent:
             raise ValueError("Ideals have to be defined over the same ring.")
         
-        return NCIdeal(self.__gens + other.__gens, order=self.__order)
+        return NCIdeal_right(self.__gens + other.__gens, order=self.order())
 ############################################################################        
 #     def ideal_membership(self,f,maxiter=10,maxdeg=-1,trace_cofactors=True,criterion=True,reset=True,verbose=0):
 #         G = self.groebner_basis(maxiter=maxiter,maxdeg=maxdeg,trace_cofactors=trace_cofactors,criterion=criterion,reset=reset,verbose=verbose)

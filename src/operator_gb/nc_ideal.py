@@ -50,7 +50,7 @@ class NCIdeal:
     def internal_gens(self): return self.__internal_gens
     def order(self): return self.__parent.order()
     def algo(self): return self.__algo
-    def base_ring(self): return self.__parent().base_ring()
+    def base_ring(self): return self.__parent.base_ring()
 ############################################################################    
     def __repr__(self):
         return "NCIdeal %s of %s" % (str(tuple(self.__gens)),str(self.__parent))
@@ -101,7 +101,7 @@ class NCIdeal:
         if self.__parent != other.__parent:
             raise ValueError("Ideals have to be defined over the same ring.")
         
-        return NCIdeal(self.__gens + other.__gens, order=self.__order)
+        return NCIdeal(self.__gens + other.__gens, order=self.order())
 ############################################################################        
     def reduced_form(self,f,maxiter=10,maxdeg=-1,trace_cofactors=True,criterion=True,reset=True,verbose=0):
         G = self.groebner_basis(maxiter=maxiter,maxdeg=maxdeg,trace_cofactors=trace_cofactors,criterion=criterion,reset=reset,verbose=verbose)
@@ -139,8 +139,8 @@ class NCIdeal:
         elif heuristic == 'groebner':
             G = I.groebner_basis(maxiter=maxiter,maxdeg=maxdeg,trace_cofactors=trace_cofactors,
                                 criterion=criterion,reset=reset,verbose=verbose)
-            G += interreduce(G)
-            G = set(G)
+            # rebind, do not extend: G is the list F4 holds as its basis
+            G = set(G + interreduce(G))
         elif heuristic == 'subalgebra':
             raise NotImplementedError
         elif heuristic == 'right-ideal':
@@ -396,6 +396,6 @@ class NCIdeal:
                 h = reduced_form(G,g)
                 if h.is_zero(): return [g]
             if d <= degbound:
-                mons = [(sx, t, m.lrmul('',T(x))) for (s,t,m) in mons for sx,x in X[s] if x in relevant_variables]
+                mons = [(sx, t, m.lrmul('',T(x))) for (s,t,m) in mons for sx,x in X.get(s,[]) if x in relevant_variables]
                 
         return None       

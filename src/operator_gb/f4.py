@@ -82,7 +82,8 @@ class F4():
             # constant_flag checks if GB contains 1
             if self.__constant_flag:
                 self.__already_rewritten = len(self.__G)
-                return self.__G
+                # hand out a copy: callers must not be able to mutate the basis
+                return list(self.__G)
             self.compute_ambiguities()
         
         self.__already_rewritten = len(self.__G)
@@ -114,7 +115,7 @@ class F4():
         if trace_cofactors:
             self.rewrite_cofactors()
             
-        return self.__G
+        return list(self.__G)
 
 ############################################################################
     def compute_ambiguities(self,oldlen=0):

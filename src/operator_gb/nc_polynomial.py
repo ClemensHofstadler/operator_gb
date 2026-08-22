@@ -48,11 +48,19 @@ class NCPolynomial:
     def cofactors(self): return self.__cofactors
 ############################################################################
     def variables(self,internal=False):
+        """
+        Return the variables occurring in ``self``.
+
+        The monomials are stored in the internal one-character encoding, so
+        ``internal=True`` returns those characters as they are and only
+        ``internal=False`` needs the translator.
+        """
         T = self.parent().translator()
         out = set()
         for m in self.__mons:
             out.update(set(str(m)))
-        return [T(x,to_internal=internal) for x in out]
+        if internal: return list(out)
+        return [T(x,to_internal=False) for x in out]
 ############################################################################
     def coefficients_monomials(self): return zip(self.__coeffs, self.__mons)
 ############################################################################
@@ -246,7 +254,7 @@ class NCPolynomial:
             
             if side == 'left':
                 if not lm_f.endswith(lm_g): return False
-                l = lm_f[:-len(lm_g)]
+                l = lm_f[:len(lm_f)-len(lm_g)]
                 r = ''
                 mons.append(NCMonomial(l,A))
             else:
@@ -259,7 +267,9 @@ class NCPolynomial:
             coeffs.append(c)
             f = f - g.lrmul(l,r).coeff_mul(c)
         
-        quo = NCPolynomial(coeffs, mons)
+        # the loop produces strictly decreasing monomials, but NCPolynomial
+        # expects them in ascending order with the leading monomial last
+        quo = NCPolynomial(coeffs[::-1], mons[::-1])
         return quo    
 ############################################################################
     def normal_cofactors(self,gens):

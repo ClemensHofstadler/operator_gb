@@ -487,7 +487,7 @@ def multi_lift_solution(assumptions, n, matrices, f, random_tries=1):
             if evaluate(f,lift) % mod != 0:
                 try: 
                     rat_lift = ratrec(lift, mod)
-                    if check_counterexample(assumptions, rat_lift):
+                    if check_counterexample(assumptions, rat_lift, f):
                         return rat_lift
                 except Exception as e: 
                     pass                        
@@ -514,7 +514,6 @@ def check_counterexample(assumptions, candidate, claim=None, Q=None):
         
     return evaluate(claim, candidate) != 0
 
-#takes the variable name, rows and cols and returns a mastrix of the given size where variables name depens on the input name
 def create_symbolic_matrix(name, rows, cols, ring=None):
     #Create a symbolic matrix with entries named as name[i][j].
     if ring is None:
@@ -523,7 +522,7 @@ def create_symbolic_matrix(name, rows, cols, ring=None):
     return Matrix(ring, rows, cols, lambda i, j: f"{name}_{i}_{j}")
 
 
-def generate_quiver(X):
+def generate_quiver(X, dim=2):
     Q = Quiver([('V','V',str(x)) for x in X])
     dims = {'V' : dim}
     return Q, dims

@@ -74,11 +74,10 @@ def interreduce(G,one_sided=None):
     H = deepcopy(G)
     
     changes = True
-    first_change = 0
 
     while changes:
         changes = False
-        for i in range(first_change,s):
+        for i in range(s):
             
             if H[i] is None: continue
             normal_form = __reduced_form__(H,i,A,one_sided=one_sided)
@@ -86,13 +85,13 @@ def interreduce(G,one_sided=None):
             # normal form = g_i
             if normal_form is None: continue
             # normal form = 0
-            elif normal_form.is_zero(): H[i].set_to_zero()
+            elif normal_form.is_zero():
+                H[i].set_to_zero()
+                changes = True
             # normal form != 0
-            elif normal_form:
+            else:
                 H[i] = normal_form
-                if not changes:
-                    first_change = i
-                    changes = True
+                changes = True
 
     H = [g for g in H if not g.is_zero()]
     for g in H: g.make_monic()
@@ -120,7 +119,7 @@ def reduced_form(G, f, trace_cofactors=True):
                              "representation. The result would mix up the "
                              "polynomials that the cofactors refer to.")
             
-    h = __reduced_form__(G + [f], len(G), f.parent(), intern=False, trace_cofactors=trace_cofactors)
+    h = __reduced_form__(G + [copy(f)], len(G), f.parent(), intern=False, trace_cofactors=trace_cofactors)
     # h is such that f + h.cofactors() = h
     # make h such that f - h.cofactors() = h
     for c in h.cofactors(): c.multiply_by(-1)

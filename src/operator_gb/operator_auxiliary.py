@@ -42,17 +42,17 @@ def pinv(a,b,a_adj,b_adj):
     
     OUTPUT:
     
-    The 4 Moore-Penrose equations for ``a`` plus the 2 adjoint statements.
+    The 4 Moore-Penrose equations for ``a``. 
     
     EXAMPLES::
      
         sage: from OperatorGB import *
         sage: F.<x,y,x_adj,y_adj> = FreeAlgebra(QQ,4)
         sage: pinv(x,y,x_adj,y_adj)
-        [-x + x*y*x, -y + y*x*y, -x*y + y_adj*x_adj, -y*x + x_adj*y_adj, -x_adj + x_adj*y_adj*x_adj, -y_adj + y_adj*x_adj*y_adj]
+        [-x + x*y*x, -y + y*x*y, -x*y + y_adj*x_adj, -y*x + x_adj*y_adj]
         sage: F.<a,b,c,d> = FreeAlgebra(QQ,4)
         sage: pinv(a,a+b,c-d,a)
-        [-a + a^3 + a*b*a, -a - b + a^3 + a^2*b + b*a^2 + b*a*b, -a^2 - a*b + a*c - a*d, -a^2 - b*a + c*a - d*a, -c + d + c*a*c - c*a*d - d*a*c + d*a*d, -a + a*c*a - a*d*a]
+        [-a + a^3 + a*b*a, -a - b + a^3 + a^2*b + b*a^2 + b*a*b, -a^2 - a*b + a*c - a*d, -a^2 - b*a + c*a - d*a]
         
     """
     
