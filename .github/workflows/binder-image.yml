@@ -1,0 +1,60 @@
+# Builds the prebuilt Binder image (SageMath + operator_gb + CaDiCaL) and pushes
+# it to GHCR, so that mybinder.org only has to build the thin layer in
+# binder/Dockerfile.
+#
+# NOTE: after the first successful run, the package has to be made *public*
+# once, under Packages -> operator_gb-binder -> Package settings -> Change
+# visibility. mybinder.org pulls anonymously and cannot see a private package.
+name: Binder image
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'includes/**'
+      - 'setup.py'
+      - 'requirements.txt'
+      - 'binder/base.Dockerfile'
+      - '.github/workflows/binder-image.yml'
+  workflow_dispatch:
+
+# GHCR repository paths must be lowercase, so this is spelled out rather than
+# derived from github.repository_owner (which is mixed case).
+env:
+  IMAGE: ghcr.io/clemenshofstadler/operator_gb-binder
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: binder/base.Dockerfile
+          # The SageMath base image is only published for amd64, which is also
+          # what mybinder.org runs.
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:sage-10.9
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
