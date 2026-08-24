@@ -255,7 +255,7 @@ def run_cadical_with_cnf(cnf):
 
 ##############################################################################
 
-def construct_counterexample(assumptions,claim,Q=None,dims=None,n=2,random_tries=0,verbosity=1):
+def construct_counterexample(assumptions,claim,Q=None,dims=None,n=2,random_tries=0,verbosity=0):
     r"""
     Input:
         - ``assumptions`` -- A list of noncommutative polynomials
