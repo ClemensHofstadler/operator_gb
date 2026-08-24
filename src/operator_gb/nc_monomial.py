@@ -44,9 +44,9 @@ class NCMonomial:
         Instead use the call method from ``MyFreeAlgebra`` to create
         noncommutative polynomials.
         
-    TETS::
+    TESTS::
      
-        sage: from OperatorGB import *
+        sage: from operator_gb import *
         sage: F.<x,y,z> = FreeAlgebra(QQ,3)
         sage: A = MyFreeAlgebra(QQ,F.gens()) 
         sage: m = A(x*y*z*x).lm()
@@ -73,7 +73,7 @@ class NCMonomial:
         
         TESTS::
     
-            sage: from OperatorGB import *
+            sage: from operator_gb import *
             sage: A = MyFreeAlgebra(QQ,['a','b','c'])
             sage: NCMonomial('',A)
             1
@@ -144,7 +144,7 @@ class NCMonomial:
         
         TESTS::
     
-            sage: from OperatorGB import *
+            sage: from operator_gb import *
             sage: F.<x,y,z> = FreeAlgebra(QQ,3)
             sage: A = MyFreeAlgebra(QQ,F.gens()) 
             sage: m = A(x*y*z*x).lm()
@@ -194,7 +194,7 @@ class NCMonomial:
                 
         TESTS::
     
-            sage: from OperatorGB import *
+            sage: from operator_gb import *
             sage: F.<x,y,z> = FreeAlgebra(QQ,3)
             sage: A = MyFreeAlgebra(QQ,F.gens()) 
             sage: m = A(x*y*x).lm()
@@ -215,9 +215,9 @@ class NCMonomial:
         r"""
         Print the monomial in an easily readable way.
         
-        EXAMPLES:
+        EXAMPLES::
     
-            sage: from OperatorGB import *
+            sage: from operator_gb import *
             sage: F.<x,y,z> = FreeAlgebra(QQ,3)
             sage: A = MyFreeAlgebra(QQ,F.gens())
             sage: A(x*y + 1).monomials()

@@ -268,14 +268,18 @@ def construct_counterexample(assumptions,claim,Q=None,dims=None,n=2,random_tries
 
     Output:
         - A counterexample in rational numbers if there exists one
-    Example:
+    EXAMPLES::
+
+        sage: from operator_gb import *
         sage: A.<x,y> = FreeAlgebra(QQ)
         sage: assumptions = [x*y]
         sage: claim = x
         sage: Q = Quiver([('U','U',x), ('U','U',y)])
-        sage: dictionary = {'U':2}
+        sage: dims = {'U':2}
         sage: n = 2
-        sage: construct_counterexample(assumptions,claim,Q,dictionary,n)
+        sage: sol = construct_counterexample(assumptions,claim,Q,dims,n,verbosity=0)
+        sage: check_counterexample(assumptions,sol,claim)
+        True
     """
     start_time = time.process_time()
     

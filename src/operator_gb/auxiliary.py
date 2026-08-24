@@ -39,11 +39,11 @@ def flatten(l):
             
     EXAMPLES::
      
-        sage: from OperatorGB import *
+        sage: from operator_gb import *
         sage: flatten([[1,2],[3,4]])
-        [1,2,3,4]
+        [1, 2, 3, 4]
         sage: flatten([[1,2],[],[3,4]])
-        [1,2,3,4]
+        [1, 2, 3, 4]
         sage: flatten([[],[]])
         []
     """
@@ -84,12 +84,12 @@ def simplify_str(string):
             
     TESTS::
      
-        sage: from OperatorGB import *
-        sage: simplify_string('1')
+        sage: from operator_gb import *
+        sage: simplify_str('1')
         ''
-        sage: simplify_string('a*b*c')
+        sage: simplify_str('a*b*c')
         'abc'
-        sage: simplify_string('a^2*b^3*c')
+        sage: simplify_str('a^2*b^3*c')
         'aabbbc'
     """
     m = ''

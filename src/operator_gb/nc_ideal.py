@@ -172,7 +172,7 @@ class NCIdeal:
             
         EXAMPLES::
      
-            sage: from OperatorGB import *
+            sage: from operator_gb import *
             sage: F.<x,y> = FreeAlgebra(QQ,2)
             sage: I = NCIdeal([x])
             sage: J = NCIdeal([y])
@@ -222,7 +222,7 @@ class NCIdeal:
             
         EXAMPLES::
      
-            sage: from OperatorGB import *
+            sage: from operator_gb import *
             sage: F.<x,y> = FreeAlgebra(QQ,2)
 
         """        

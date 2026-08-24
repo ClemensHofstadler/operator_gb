@@ -1,6 +1,6 @@
 # coding: utf-8
 """
-OperatorGB
+Normal form
 ================
 
 Module to compute normal forms of noncommutative polynomials
