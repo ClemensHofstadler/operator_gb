@@ -34,8 +34,8 @@ RUN if id -u ${NB_UID} >/dev/null 2>&1; then \
         useradd -m -s /bin/bash -u ${NB_UID} -g ${NB_USER} ${NB_USER}; \
     fi
 
-# The case study is the thing people come here to run
-COPY --chown=${NB_USER}:${NB_USER} Case-Study.ipynb ${HOME}/
+# The tutorial is what Binder opens; the case study is the full reference
+COPY --chown=${NB_USER}:${NB_USER} Tutorial.ipynb Case-Study.ipynb ${HOME}/
 
 # Switch to the user
 USER ${NB_USER}

@@ -1,6 +1,6 @@
 # operator_gb
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ClemensHofstadler/operator_gb/HEAD?labpath=Case-Study.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ClemensHofstadler/operator_gb/HEAD?labpath=Tutorial.ipynb)
 
 ## Description
 
@@ -10,19 +10,21 @@ certify non-membership in an ideal by computing matrix certificates.
 
 ## Try it online
 
-The case study [`Case-Study.ipynb`](Case-Study.ipynb) can be run in the browser, without installing
-anything, by clicking the Binder badge above or by following this link:
+Two notebooks can be run in the browser, without installing anything, by clicking the Binder badge
+above or by following the links below.
 
-- https://mybinder.org/v2/gh/ClemensHofstadler/operator_gb/HEAD?labpath=Case-Study.ipynb
+- [`Tutorial.ipynb`](Tutorial.ipynb) is a hands-on introduction and the notebook the Binder badge opens.
+  https://mybinder.org/v2/gh/ClemensHofstadler/operator_gb/HEAD?labpath=Tutorial.ipynb
+
+- [`Case-Study.ipynb`](Case-Study.ipynb): about thirty statements about the
+  Moore-Penrose inverse, from the Handbook of Linear Algebra to Hartwig's triple reverse order law,
+  with all proofs carried out.
+  https://mybinder.org/v2/gh/ClemensHofstadler/operator_gb/HEAD?labpath=Case-Study.ipynb
 
 The Binder session provides SageMath with `operator_gb` already installed. Note that Binder offers
 only limited resources (1-2 GB of memory, sessions are shut down after 10 minutes of inactivity),
 so the larger computations of the case study may be slow there. All outputs are stored in the
-notebook, so the results can also be read without re-running anything.
-
-Additional examples are available in the following CoCalc worksheets:
-- https://cocalc.com/georeg/Moore-Penrose-case-study/notebook
-- https://cocalc.com/share/public_paths/43f6aeac21a85d08e70ab672157ab2caa49900aa
+notebooks, so the results can also be read without re-running anything.
 
 ## License
 
