@@ -261,7 +261,9 @@ def construct_counterexample(assumptions,claim,Q=None,dims=None,n=2,random_tries
         - ``assumptions`` -- A list of noncommutative polynomials
         - ``claim`` -- a polynomial
         - ``Q`` -- a Quiver
-        - ``dims`` -- a dictionary defining sizes of the matrices
+        - ``dims`` -- a dictionary defining sizes of the matrices, or, if ``Q`` is not
+          given, a single integer; in that case, all variables are taken to be square
+          matrices of that dimension (default: ``2``)
         - ``n`` -- a natural number,indicates if we want to lift to 2^(2^n)
         - ``random_tries`` -- and integer number. If 0 we try Hensel lifting deterministic, if >0 we try hensel lifting not deterministic for random_tries number of                 tries
         - ``verbosity`` -- an integer number if >0 we output what the program does
@@ -286,10 +288,10 @@ def construct_counterexample(assumptions,claim,Q=None,dims=None,n=2,random_tries
     global _verbosity_ 
     _verbosity_ = verbosity
     
-    if Q is None and dims is not None:
-        raise ValueError(f"Dimensions given but no quiver")
     if Q is None:
-        Q, dims = generate_quiver(assumptions[0].parent().gens())    
+        if isinstance(dims, dict):
+            raise ValueError(f"Dimensions given but no quiver")
+        Q, dims = generate_quiver(assumptions[0].parent().gens(), dim=2 if dims is None else dims)
     for g in assumptions + [claim]:
         if not Q.is_compatible(g):
             raise ValueError(f"{g} is not compatible with the quiver")
