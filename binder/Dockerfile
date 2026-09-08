@@ -40,8 +40,25 @@ COPY --chown=${NB_USER}:${NB_USER} Tutorial.ipynb Case-Study.ipynb ${HOME}/
 # Switch to the user
 USER ${NB_USER}
 
-RUN mkdir -p $(/usr/bin/sage -sh -c 'jupyter --data-dir')/kernels && \
-    ln -sf $(/usr/bin/sage -sh -c 'echo $SAGE_VENV')/share/jupyter/kernels/sagemath $(/usr/bin/sage -sh -c 'jupyter --data-dir')/kernels/sagemath
+# Make Sage's Jupyter kernel visible to the notebook server.
+#
+# JupyterLab resolves a notebook's kernel by kernelspec *name*, and a notebook
+# carries the name of whatever install it was last saved with: Case-Study.ipynb
+# asks for `sagemath`, while Tutorial.ipynb (saved with the macOS Sage app)
+# asks for `sagemath-10.9`. Sage's kernel here is only called `sagemath`, and an
+# unresolved name makes the server fall back to the plain python3 kernel without
+# warning, so every Sage cell fails. Expose the kernel under `sagemath` plus
+# every `sagemath*` name the shipped notebooks request.
+RUN set -eu; \
+    kernels_dir="$(/usr/bin/sage -sh -c 'jupyter --data-dir')/kernels"; \
+    sage_kernel="$(/usr/bin/sage -sh -c 'echo $SAGE_VENV')/share/jupyter/kernels/sagemath"; \
+    test -f "$sage_kernel/kernel.json"; \
+    mkdir -p "$kernels_dir"; \
+    names="$(python3 -c "import glob, json; print(' '.join(sorted({'sagemath'} | {n for f in glob.glob('${HOME}/*.ipynb') for n in [json.load(open(f)).get('metadata', {}).get('kernelspec', {}).get('name', '')] if n.startswith('sagemath')})))")"; \
+    for name in $names; do \
+        ln -sfn "$sage_kernel" "$kernels_dir/$name"; \
+    done; \
+    echo "Sage kernel registered as: $names"
 
 # Start in the home directory of the user
 WORKDIR ${HOME}
@@ -58,3 +75,9 @@ class NoNodeJSWarningFilter(logging.Filter):\n\
 \n\
 logging.getLogger('LabApp').addFilter(NoNodeJSWarningFilter())\n\
 " > ${HOME}/.jupyter/jupyter_lab_config.py
+
+# Should a notebook still ask for a kernelspec this image does not have, start
+# Sage rather than the python3 kernel, so Sage code runs instead of erroring.
+# jupyter_server_config.py is read by both jupyter-lab and notebook 7.
+RUN echo "c.MultiKernelManager.default_kernel_name = 'sagemath'" \
+    > ${HOME}/.jupyter/jupyter_server_config.py
